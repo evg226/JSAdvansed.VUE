@@ -84,8 +84,7 @@ body {
         }
 
         &:hover {
-            transform: scale(1.2);
-
+            transform: scale(1.1);
         }
 
         &-count {
@@ -93,7 +92,7 @@ body {
             color: #ffffff;
             background: #ff4444;
             font-size: 0.9rem;
-            top: -5px;
+            top: -2px;
             right: 0;
             border-radius: 50%;
             width: 20px;
@@ -374,6 +373,11 @@ body {
         display: flex;
         // justify-content: space-between;
         margin: -10px;
+    }
+
+    &-none{
+        font-size: 2rem;
+        color: #3840ad;
     }
 
     &-item {
@@ -708,16 +712,17 @@ body {
             flex-direction: column;
             right: 20px;
             top: 28px;
-            padding: 27px 0 20px;
+            padding: 27px 0 27px;
             background: #3840ad;
             box-shadow: 0 0 10px $color-border;
             border-radius: 10px;
             z-index: 3;
+            min-height: 300px;
 
             &-item {
-                padding: 10px 30px;
-                min-width: 0;
-                max-width: 100%;
+                padding: 10px 30px 10px 30px;
+                min-width: 150px;
+                //max-width: 100%;
                 text-align: left;
 
                 &:first-child {
@@ -733,10 +738,10 @@ body {
 
         &__cart {
             &-body {
-                right: -10px;
+                //right: -10px;
 
                 &:before {
-                    right: 90px;
+                    right: 80px;
                 }
             }
         }
@@ -780,7 +785,7 @@ body {
 
         &__menu {
             top: 20px;
-            right: 0px;
+            right: 5px;
         }
 
         &__brand {
@@ -857,5 +862,12 @@ body {
     .footer{
         font-size: 0.8rem;
     }
-
+.cart {
+    &__grid {
+        display: grid;
+        grid-template-columns: 120px 55px 65px 85px 20px;
+        grid-template-rows: 25px;
+        align-items: center;
+    }
+}
 }
