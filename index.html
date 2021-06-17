@@ -15,13 +15,13 @@
         <div class="header__top container">
             <div class="header__top-left">
                 <div class="header__brand render-main" @click="openPage(pages[0])">ShopVUE</div>
-                <form  class="header__search" action="#" method="get" name="search">
-                    <input type="search" value="" placeholder="Товар..." v-model="searchLine">
+                <form  class="header__search" action="#" method="get" name="search" @submit.prevent="filterGoods">
+                    <input type="search" value="" placeholder="Товар..." v-model.lazy="searchLine">
                     <button type="submit">&#128269;</button>
                 </form>
             </div>
             <div class="header__top-right">
-                <div class="header__cart cart_button" @click="showCart=!showCart">
+                <div class="header__cart cart_button" @click="isVisibleCart=!isVisibleCart">
                     <img src="img/cart.png" alt="Корзина">
                     <span class="header__cart-count">0</span>
                 </div>
@@ -30,10 +30,10 @@
                     <span></span>
                     <span></span>
                 </div>
-                <div v-if="showCart" class="header__cart-body">
+                <div v-if="isVisibleCart" class="header__cart-body">
                     <div class="header__cart-top">
                         <div class="header__cart-header">Корзина</div>
-                        <div class="header__cart-close" @click="showCart=false">x</div>
+                        <div class="header__cart-close" @click="isVisibleCart=false">x</div>
                     </div>
                     <div class="cart__grid cart__grid_top">
                         <div class="cart__name">Товар</div>
@@ -78,11 +78,15 @@
         <section class="page">
             <h1 class="page__header"></h1>
             <article class="page__content">
-                <div v-if="pages[0].active">Страница на разработке<br><br>Перейдите в каталог</div>
 
-<!--                Каталог товаров в верстке -->
+                <!--                Главная страница -->
+                <div class="product-none" v-if="pages[0].active">Страница на разработке<br><br>Перейдите в каталог</div>
+
+
+                <!--                Каталог товаров в верстке -->
+
                 <div class="product-box" v-if="pages[1].active">
-                    <div class="product-item" v-for="product of goods" :key="product.id_product">
+                    <div class="product-item" v-for="product of filteredGoods" :key="product.id_product">
                         <div class="product-item-in">
                             <h3 class="product-header">{{product.product_name}}</h3>
                             <div class="product-img">
@@ -96,7 +100,9 @@
                                 Купить</div>
                         </div>
                     </div>
+                    <div class="product-none" v-if="filteredGoods.length==0">Не найдено!</div>
                 </div>
+
 
 
             </article>
@@ -126,18 +132,17 @@
                    {name:"Каталог",active:false},
                ],
                bradcrumb:"",
-               showCart:false,
+               isVisibleCart:false,
                showHambIcon:false,
                showMenu:true,
                menuIconClasses:"header__hamb",
-               searchLine:"",
                // Работа с каталогом товаров
                API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
                goods:[],
+               searchLine:"",
                filteredGoods:[],
            },
            methods:{
-
                openPage(item){
                    this.bradcrumb = item.name=="Главная"? "" : " / " + item.name;
                    this.pages.forEach(page=>{page.active=(page.name==item.name)?page.active=true: page.active=false});
@@ -146,7 +151,7 @@
                            this.getJSON(this.API+"/catalogData.json")
                                 .then(data => {
                                     this.goods=[...data];
-                                    console.log(this.goods);
+                                    this.filteredGoods=[...this.goods];
                                 });
                            break;
                    }
@@ -163,11 +168,17 @@
                             .catch(error=>console.log(error));
                },
 
+               filterGoods(){
+                   this.searchLine=this.searchLine.trim().toLowerCase();
+                   if (!this.pages[1].active) return;
+                   const pattern=new RegExp(this.searchLine,"i");
+                   this.filteredGoods = this.searchLine ? this.goods.filter(item=>pattern.test(item.product_name)) : this.filteredGoods=[...this.goods];
+               },
+
                addToCart(product){
                    console.log(product);
+                   alert()
                }
-
-
 
            },
            mounted(){
