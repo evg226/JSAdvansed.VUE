@@ -25,7 +25,7 @@
                     <img src="img/cart.png" alt="Корзина">
                     <span class="header__cart-count">0</span>
                 </div>
-                <div :class="menuIconClasses" v-if="showHambIcon" @click="showMenuf()">
+                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}" v-if="showHambIcon" @click="isMenuVisible=!isMenuVisible">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -56,7 +56,7 @@
         </div>
         <nav class="header__menu_wrapper">
             <div class="container">
-                <ul class="header__menu" v-if="showMenu">
+                <ul class="header__menu" v-if="isMenuVisible">
                     <li class="header__menu-item render-main"
                         v-for="item of pages" @click="openPage(item)" :key="item.name">{{ item.name }}</li>
 <!--                    <li class="header__menu-item render-main">Каталог</li>-->
@@ -134,7 +134,7 @@
                bradcrumb:"",
                isVisibleCart:false,
                showHambIcon:false,
-               showMenu:true,
+               isMenuVisible:true,
                menuIconClasses:"header__hamb",
                // Работа с каталогом товаров
                API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
@@ -155,11 +155,7 @@
                                 });
                            break;
                    }
-
-               },
-               showMenuf(){
-                   this.showMenu=!this.showMenu;
-                   this.menuIconClasses= (this.showMenu)? "header__hamb header__hamb_click" : "header__hamb";
+                   if(this.showHambIcon) this.isMenuVisible=false;
                },
 
                getJSON(url){
@@ -177,18 +173,26 @@
 
                addToCart(product){
                    console.log(product);
-                   alert()
+
                }
 
            },
            mounted(){
-               if(window.innerWidth<=768) {
-                   this.showHambIcon=true;
-                   this.showMenu=false;
-               }
+               console.log("Страница загружена!");
            }
         });
 
+        function setMenuVisible() {
+            if (window.innerWidth <= 768) {
+                app.showHambIcon = true;
+                app.isMenuVisible = false;
+            } else {
+                app.showHambIcon = false;
+                app.isMenuVisible = true;
+            }
+        }
+        window.addEventListener("resize",setMenuVisible);
+        setMenuVisible();
     </script>
 
 </body>
