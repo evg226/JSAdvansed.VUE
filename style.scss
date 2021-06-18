@@ -371,13 +371,29 @@ body {
 .product {
     &-box {
         display: flex;
-        // justify-content: space-between;
+        //justify-content: center;
+        flex-wrap: wrap;
         margin: -10px;
     }
 
     &-none{
         font-size: 2rem;
         color: #3840ad;
+        & span{
+            display: block;
+            margin: 40px 0;
+            color: #164e23;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        & div{
+            cursor: pointer;
+            font-size: 1.2rem;
+
+            &:hover{
+                color:#ff4444;
+            }
+        }
     }
 
     &-item {
@@ -420,7 +436,7 @@ body {
 
     &-img {
         margin: 20px 0;
-
+        background: #ffffff;
         & img {
             width: 100%;
         }
@@ -688,7 +704,7 @@ body {
 
         &-item {
             // width: 22%;
-            flex: 0 0 30%;
+            flex: 0 1 31%;
         }
     }
 
@@ -756,7 +772,7 @@ body {
     .product {
         &-item {
             // width: 22%;
-            flex: 1 1 32%;
+            flex: 0 1 48%;
         }
     }
 
@@ -800,7 +816,7 @@ body {
     .product {
         &-item {
             // width: 22%;
-            flex: 1 0 90%;
+            flex: 1 1 95%;
             margin: 10px 0;
         }
 

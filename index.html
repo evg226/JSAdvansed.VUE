@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Java Script: Advanced VUE</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,7 +26,7 @@
                     <img src="img/cart.png" alt="Корзина">
                     <span class="header__cart-count">0</span>
                 </div>
-                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}" v-if="showHambIcon" @click="isMenuVisible=!isMenuVisible">
+                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}" v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -48,8 +49,8 @@
                         <div class="cart__total-quantity" id="cart__quantity"></div>
                         <div class="cart__total-sum" id="cart__total"></div>
                         <div class="cart__total-button">Купить</div>
-                        
-                        
+
+
                     </div>
                 </div>
             </div>
@@ -80,7 +81,10 @@
             <article class="page__content">
 
                 <!--                Главная страница -->
-                <div class="product-none" v-if="pages[0].active">Страница на разработке<br><br>Перейдите в каталог</div>
+                <div class="product-none" v-if="pages[0].active">Добро пожаловать в интернет-магазин ShopVUE
+                    <span>Интерфейс выполнен с применением движка Vue.js</span>
+                    <div @click="openPage(pages[1])">Перейти в каталог товаров...</div>
+                </div>
 
 
                 <!--                Каталог товаров в верстке -->
@@ -92,7 +96,7 @@
                             <div class="product-img">
                                 <img :src=`img/${product.id_product}.png`>
                             </div>
-                            <p class="product-price">{{product.price}}</p>
+                            <p class="product-price">&#8381;{{product.price}}</p>
                         </div>
                         <div class="product-button">
                             <div class="product-button-buy buy-btn" @click="addToCart(product)">
@@ -133,11 +137,11 @@
                ],
                bradcrumb:"",
                isVisibleCart:false,
-               showHambIcon:false,
+               isVisibleHambIcon:false,
                isMenuVisible:true,
-               menuIconClasses:"header__hamb",
+               // menuIconClasses:"header__hamb",
                // Работа с каталогом товаров
-               API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
+               API: 'https://evg226.github.io/JSAdvansed.VUE/data/',
                goods:[],
                searchLine:"",
                filteredGoods:[],
@@ -148,14 +152,14 @@
                    this.pages.forEach(page=>{page.active=(page.name==item.name)?page.active=true: page.active=false});
                    switch (item.name){
                        case "Каталог":
-                           this.getJSON(this.API+"/catalogData.json")
+                           this.getJSON(this.API+"catalog.json")
                                 .then(data => {
                                     this.goods=[...data];
                                     this.filteredGoods=[...this.goods];
                                 });
                            break;
                    }
-                   if(this.showHambIcon) this.isMenuVisible=false;
+                   if(this.isVisibleHambIcon) this.isMenuVisible=false;
                },
 
                getJSON(url){
@@ -173,7 +177,7 @@
 
                addToCart(product){
                    console.log(product);
-
+                   alert(`Товар ${product.product_name.toUpperCase()} за ${product.price}\u20BD добавлен в корзину`);
                }
 
            },
@@ -184,10 +188,10 @@
 
         function setMenuVisible() {
             if (window.innerWidth <= 768) {
-                app.showHambIcon = true;
+                app.isVisibleHambIcon = true;
                 app.isMenuVisible = false;
             } else {
-                app.showHambIcon = false;
+                app.isVisibleHambIcon = false;
                 app.isMenuVisible = true;
             }
         }
