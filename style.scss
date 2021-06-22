@@ -84,8 +84,7 @@ body {
         }
 
         &:hover {
-            transform: scale(1.2);
-
+            transform: scale(1.1);
         }
 
         &-count {
@@ -93,7 +92,7 @@ body {
             color: #ffffff;
             background: #ff4444;
             font-size: 0.9rem;
-            top: -5px;
+            top: -2px;
             right: 0;
             border-radius: 50%;
             width: 20px;
@@ -323,6 +322,7 @@ body {
 }
 
 .bradcrumb {
+
     &__container {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -335,6 +335,7 @@ body {
 
     &__desc {
         font-weight: 600;
+        position: relative;
     }
 
     &__map span {
@@ -372,8 +373,29 @@ body {
 .product {
     &-box {
         display: flex;
-        // justify-content: space-between;
+        //justify-content: center;
+        flex-wrap: wrap;
         margin: -10px;
+    }
+
+    &-none{
+        font-size: 2rem;
+        color: #3840ad;
+        & span{
+            display: block;
+            margin: 40px 0;
+            color: #164e23;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        & div{
+            cursor: pointer;
+            font-size: 1.2rem;
+
+            &:hover{
+                color:#ff4444;
+            }
+        }
     }
 
     &-item {
@@ -416,7 +438,7 @@ body {
 
     &-img {
         margin: 20px 0;
-
+        background: #ffffff;
         & img {
             width: 100%;
         }
@@ -676,6 +698,25 @@ body {
     }
 }
 
+.errors{
+    //position: absolute;
+    text-align: center;
+    background: #ff4444;
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 1.3rem;
+    border-radius: 20px;
+    width:100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    &__caption{
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ffffff;
+    }
+}
+
 @media (max-width:900px) {
     .product {
         &-box {
@@ -684,7 +725,7 @@ body {
 
         &-item {
             // width: 22%;
-            flex: 0 0 30%;
+            flex: 0 1 31%;
         }
     }
 
@@ -708,16 +749,17 @@ body {
             flex-direction: column;
             right: 20px;
             top: 28px;
-            padding: 27px 0 20px;
+            padding: 27px 0 27px;
             background: #3840ad;
             box-shadow: 0 0 10px $color-border;
             border-radius: 10px;
             z-index: 3;
+            min-height: 300px;
 
             &-item {
-                padding: 10px 30px;
-                min-width: 0;
-                max-width: 100%;
+                padding: 10px 30px 10px 30px;
+                min-width: 150px;
+                //max-width: 100%;
                 text-align: left;
 
                 &:first-child {
@@ -733,10 +775,10 @@ body {
 
         &__cart {
             &-body {
-                right: -10px;
+                //right: -10px;
 
                 &:before {
-                    right: 90px;
+                    right: 80px;
                 }
             }
         }
@@ -751,7 +793,7 @@ body {
     .product {
         &-item {
             // width: 22%;
-            flex: 1 1 32%;
+            flex: 0 1 48%;
         }
     }
 
@@ -780,7 +822,7 @@ body {
 
         &__menu {
             top: 20px;
-            right: 0px;
+            right: 5px;
         }
 
         &__brand {
@@ -795,7 +837,7 @@ body {
     .product {
         &-item {
             // width: 22%;
-            flex: 1 0 90%;
+            flex: 1 1 95%;
             margin: 10px 0;
         }
 
@@ -806,6 +848,7 @@ body {
 
     .bradcrumb {
         margin: 0 0 40px 0;
+
     }
 
     .hamburger {
@@ -857,5 +900,12 @@ body {
     .footer{
         font-size: 0.8rem;
     }
-
+.cart {
+    &__grid {
+        display: grid;
+        grid-template-columns: 120px 55px 65px 85px 20px;
+        grid-template-rows: 25px;
+        align-items: center;
+    }
+}
 }
