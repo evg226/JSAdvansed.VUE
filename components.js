@@ -28,6 +28,7 @@ Vue.component("goods-item",{
         </div>
     `,
 });
+
 Vue.component("cart",{
     props:["cartItems"],
     template: `
@@ -95,5 +96,15 @@ Vue.component("searchEq",{
             this.searchLine=this.searchLine.trim().toLowerCase();
         }
     }
+})
+
+Vue.component("errorComp",{
+    props:["errorMessages"],
+    template:`
+        <div v-if="errorMessages.length" class="errors"  @click="$emit('close')">
+            <div class="errors__caption">Ошибки</div>    
+            <div  class="errors__text" v-for="err of errorMessages">{{err}}</div>
+        </div>
+    `
 })
 

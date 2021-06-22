@@ -322,6 +322,7 @@ body {
 }
 
 .bradcrumb {
+
     &__container {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -334,6 +335,7 @@ body {
 
     &__desc {
         font-weight: 600;
+        position: relative;
     }
 
     &__map span {
@@ -696,6 +698,25 @@ body {
     }
 }
 
+.errors{
+    //position: absolute;
+    text-align: center;
+    background: #ff4444;
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 1.3rem;
+    border-radius: 20px;
+    width:100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    &__caption{
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ffffff;
+    }
+}
+
 @media (max-width:900px) {
     .product {
         &-box {
@@ -827,6 +848,7 @@ body {
 
     .bradcrumb {
         margin: 0 0 40px 0;
+
     }
 
     .hamburger {

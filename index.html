@@ -49,13 +49,19 @@
     <main>
         <div class="bradcrumb">
             <div class="bradcrumb__container container">
-                <div class="bradcrumb__desc">Интернет-магазин&nbsp;VUE</div>
+                <div class="bradcrumb__desc">
+                    Интернет-магазин&nbsp;VUE
+                </div>
                 <div class="bradcrumb__map"><span class="render-main" @click="openPage(pages[0])">{{ pages[0].name}}</span><span
-                        class="bradcrumb__map_changable">{{ bradcrumb }}</span></div>
+                        class="bradcrumb__map_changable">{{ bradcrumb }}</span>
+                </div>
             </div>
-        </div>
+
         <div class="container">
-        <section class="page">
+<!--            Сообщение об ошибке при загрузке данных-->
+            <error-comp :error-messages="errors" @close="clearErrors"></error-comp>
+
+            <section class="page">
             <h1 class="page__header"></h1>
             <article class="page__content">
 
@@ -67,11 +73,11 @@
 
 
                 <!--                Каталог товаров в верстке -->
-
                     <goods-list :goods="filteredGoods" @add-cart="addToCart" v-if="pages[1].active"></goods-list>
 
             </article>
         </section>
+        </div>
         </div>
 
     </main>
@@ -106,9 +112,13 @@
                goods:[],
                // searchLine:"",
                filteredGoods:[],
-               cart:[]
+               cart:[],
+               errors:[] //ошибки при загрузке данных
            },
            methods:{
+               clearErrors(){
+                   this.errors=[];
+               },
                openPage(item){
                    this.bradcrumb = item.name=="Главная"? "" : " / " + item.name;
                    this.pages.forEach(page=>{page.active=(page.name==item.name)?page.active=true: page.active=false});
@@ -119,7 +129,11 @@
                                .then(data => {
                                    this.goods=[...data];
                                    this.filteredGoods=[...this.goods];
-                               });
+                               })
+                               .catch(error=> {
+                                       this.errors.push("Ошибка при загрузке каталога товаров");
+                                   }
+                               );
                            break;
                    }
                    if(this.isVisibleHambIcon) this.isMenuVisible=false;
@@ -128,7 +142,9 @@
                getJSON(url){
                    return fetch(url)
                             .then(result=>result.json())
-                            .catch(error=>console.log(error));
+                            .catch(error=>{
+                                console.log(error);
+                            });
                },
 
                filterGoods(searchLine){
@@ -166,6 +182,9 @@
                this.getJSON(this.API+"cart.json")
                    .then(data => {
                        this.cart=[...data];
+                   })
+                   .catch(error=> {
+                       this.errors.push("Ошибка при загрузке корзины");
                    });
            }
         });
