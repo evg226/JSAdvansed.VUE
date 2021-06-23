@@ -30,7 +30,7 @@
                     <span></span>
                 </div>
 
-                <cart :cart-items="cart"  @remove-cart="removeFromCart"></cart>
+                <cart :cart-items="cart"  @remove-cart="removeFromCart" @update-cart="addToCart"></cart>
 
             </div>
         </div>
@@ -108,7 +108,7 @@
                isMenuVisible:true,
                // menuIconClasses:"header__hamb",
                // Работа с каталогом товаров
-               API: 'https://evg226.github.io/JSAdvansed.VUE/data/',
+               // API: 'https://evg226.github.io/JSAdvansed.VUE/data/',
                goods:[],
                // searchLine:"",
                filteredGoods:[],
@@ -125,7 +125,8 @@
                    switch (item.name){
                        case "Каталог":
                            // загрузка каталога
-                           this.getJSON(this.API+"catalog.json")
+                           //изменен API для каталога на сервер nodeJS
+                           this.getJSON("/catalog")
                                .then(data => {
                                    this.goods=[...data];
                                    this.filteredGoods=[...this.goods];
@@ -138,35 +139,57 @@
                    }
                    if(this.isVisibleHambIcon) this.isMenuVisible=false;
                },
-
-               getJSON(url){
-                   return fetch(url)
+               // изменен метод для запроса на сервер nodeJS (Добавлена опция для POST запроса
+               getJSON(url,data){
+                   let post=data?{
+                       method:"POST",
+                       headers:{"Content-Type":"application/json;charset=utf-8"},
+                       body: JSON.stringify(data)}:null;
+                   return fetch(url,post)
                             .then(result=>result.json())
                             .catch(error=>{
                                 console.log(error);
                             });
-               },
+                   },
 
                filterGoods(searchLine){
                    if (!this.pages[1].active) return;
                    const pattern=new RegExp(searchLine,"i");
                    this.filteredGoods = searchLine ? this.goods.filter(item=>pattern.test(item.product_name)) : this.filteredGoods=[...this.goods];
                },
-
+//изменены методы для добавления/изменения и удаления корзины
                addToCart(product){
-                   //Здесь будет код по запросу на сервер с передачей id продукта и получением ответа об успехе добавления или изменения
-                   let findItem=this.cart.find(cartItem=>product.id_product == cartItem.id_product);
-                   if(findItem){
-                       findItem.quantity++;
-                   } else {
-                       this.cart.push({...product, quantity:1});
-                   }
+                   this.getJSON("/addToCart",product)
+                       .then(data=>{
+                           if(data.result==1){
+                               this.renderCart();
+                           } else {
+                               this.errors.push(`Ошибка при добавлении товара ${product.product_name} в корзину`);
+                           }
+                       });
                },
 
                removeFromCart(cartItem){
-                   //Здесь будет код по запросу на сервер с передачей id продукта и получением ответа об успехе удаления
-                   this.cart.splice(this.cart.indexOf(cartItem),1);
-               }
+                   this.getJSON("/removeFromToCart",cartItem)
+                       .then(data=>{
+                           if(data.result==1){
+                               this.renderCart();
+                           } else {
+                               this.errors.push(`Ошибка при удалении товара ${cartItem.product_name} из корзины`);
+                           }
+                       });
+                   // this.cart.splice(this.cart.indexOf(cartItem),1);
+               },
+//изменен API для корзины на сервер nodeJS
+               renderCart(){
+                   this.getJSON("/cart")
+                       .then(data => {
+                           this.cart=[...data];
+                       })
+                       .catch(error=> {
+                           this.errors.push("Ошибка при загрузке корзины");
+                       });
+               },
            },
             computed:{
                 cartQuantity(){
@@ -176,16 +199,9 @@
                     return this.cart.reduce((accum,item)=>accum+ +item.quantity*item.price,0);
                 }
             },
-           mounted(){
-               console.log("Страница загружена!");
-               // Загрузка содержимого корзины
-               this.getJSON(this.API+"cart.json")
-                   .then(data => {
-                       this.cart=[...data];
-                   })
-                   .catch(error=> {
-                       this.errors.push("Ошибка при загрузке корзины");
-                   });
+
+            mounted(){
+                this.renderCart();
            }
         });
 

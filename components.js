@@ -71,7 +71,14 @@ Vue.component("cartItem",{
         <div class="cart__element cart__grid">
             <div class="cart__name">{{item.product_name}}</div>
             <div class="cart__price">{{item.price}}</div>
-            <input class="cart__quantity" type="number" @change="e=>{if(e.target.value<=0) $parent.$emit('remove-cart',item);}" v-model.lazy="item.quantity">
+            <input class="cart__quantity" type="number"
+                    @change="e=>{if(e.target.value<=0) {
+                                        $parent.$emit('remove-cart',item);
+                                    } else {
+                                        $parent.$emit('update-cart',item);                                                                                
+                                    }
+                                }"
+                     v-model.lazy="item.quantity ">
             <div class="cart__sum">{{item.price*item.quantity}}</div>
             <button class="cart__remove" @click="$parent.$emit('remove-cart',item)">X</button>
         </div>
