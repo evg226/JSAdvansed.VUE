@@ -1,14 +1,1 @@
-[
-  {
-    "id_product": 4,
-    "product_name": "Мышь",
-    "price": 450,
-    "quantity": 2
-  },
-  {
-    "id_product": 8,
-    "product_name": "Роутер",
-    "price": 3950,
-    "quantity": 2
-  }
-]
+[{"id_product":3,"product_name":"Ноутбук","price":28560,"quantity":2},{"id_product":1,"product_name":"Клавиатура","price":800,"quantity":1}]
