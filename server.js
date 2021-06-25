@@ -81,7 +81,7 @@ app.post("/removeFromToCart",(req,res)=>{
         } else {
             const cartItem=req.body;
             const cart=JSON.parse(result);
-            cart.splice(cart.indexOf(cartItem),1);
+            cart.forEach((item,index)=> (item.id_product == cartItem.id_product) && cart.splice(index,1));
             fs.writeFile("./data/cart.json",JSON.stringify(cart),err=>{
                 if (err){
                     res.send('{"result": 0}');
