@@ -16,56 +16,44 @@
         <div class="header__top container">
             <div class="header__top-left">
                 <div class="header__brand render-main" @click="openPage(pages[0])">ShopVUE</div>
-                <search-eq @search-submit="filterGoods"></search-eq>
+                <search-eq :goods="goods" :filtered-goods="filteredGoods"></search-eq>
             </div>
             <div class="header__top-right">
                 <div class="header__cart cart_button" @click="isVisibleCart=!isVisibleCart">
                     <img src="img/cart.png" alt="Корзина">
-                    <span class="header__cart-count">{{cartQuantity}}</span>
+<!--                    <span class="header__cart-count">{{cartQuantity}}</span>-->
+                    <cart :icon="true" :cart-items="cart"></cart>
                 </div>
+                <nav-menu :type="'hamburger-icon'"></nav-menu>
+                <!--                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}"
+                 v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">-->
+<!--                    <span></span>-->
+<!--                    <span></span>-->
+<!--                    <span></span>-->
+<!--                </div>-->
 
-                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}" v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <cart :cart-items="cart"  @remove-cart="removeFromCart" @update-cart="addToCart"></cart>
+                <cart :icon="false" :cart-items="cart" :error-box="errors" :query-server="getJSON"></cart>
 
             </div>
         </div>
         <nav class="header__menu_wrapper">
             <div class="container">
-                <ul class="header__menu" v-if="isMenuVisible">
-                    <li class="header__menu-item render-main"
-                        v-for="item of pages" @click="openPage(item)" :key="item.name">{{ item.name }}</li>
-<!--                    <li class="header__menu-item render-main">Каталог</li>-->
-                </ul>
+                <nav-menu :type="'top-menu'" :load-data="loadData" :pages="pages"></nav-menu>
             </div>
         </nav>
         <div class="header__line header__line_2"></div>
     </header>
 
     <main>
-        <div class="bradcrumb">
-            <div class="bradcrumb__container container">
-                <div class="bradcrumb__desc">
-                    Интернет-магазин&nbsp;VUE
-                </div>
-                <div class="bradcrumb__map"><span class="render-main" @click="openPage(pages[0])">{{ pages[0].name}}</span><span
-                        class="bradcrumb__map_changable">{{ bradcrumb }}</span>
-                </div>
-            </div>
+        <nav-menu :type="'bradcrumb'" :pages="pages"></nav-menu>
 
         <div class="container">
-<!--            Сообщение об ошибке при загрузке данных-->
-            <error-comp :error-messages="errors" @close="clearErrors"></error-comp>
+            <error-comp :error-messages="errors"></error-comp>
 
             <section class="page">
             <h1 class="page__header"></h1>
             <article class="page__content">
-
-                <!--                Главная страница -->
+<!--                Главная страница -->
                 <div class="product-none" v-if="pages[0].active">Добро пожаловать в интернет-магазин ShopVUE
                     <span>Интерфейс выполнен с применением движка Vue.js</span>
                     <div @click="openPage(pages[1])">Перейти в каталог товаров...</div>
@@ -73,12 +61,14 @@
 
 
                 <!--                Каталог товаров в верстке -->
-                    <goods-list :goods="filteredGoods" @add-cart="addToCart" v-if="pages[1].active"></goods-list>
+                    <goods-list v-if="pages[1].active" :goods="filteredGoods" :cart-items="cart"
+                                :error-box="errors" :query-server="getJSON">
+                    </goods-list>
 
             </article>
-        </section>
+            </section>
         </div>
-        </div>
+
 
     </main>
 
@@ -91,7 +81,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-    <script src="components.js"></script>
+    <script src="errors.js"></script>
+    <script src="cart.js"></script>
+    <script src="search.js"></script>
+    <script src="calalog.js"></script>
+    <script src="pages.js"></script>
     <script src="main.js"></script>
 
 </body>
