@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
     <title>Java Script: Advanced VUE</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,48 +16,27 @@
         <div class="header__top container">
             <div class="header__top-left">
                 <div class="header__brand render-main" @click="openPage(pages[0])">ShopVUE</div>
-                <form  class="header__search" action="#" method="get" name="search">
-                    <input type="search" value="" placeholder="Товар..." v-model="searchLine">
-                    <button type="submit">&#128269;</button>
-                </form>
+                <search-eq @search-submit="filterGoods"></search-eq>
             </div>
             <div class="header__top-right">
-                <div class="header__cart cart_button" @click="showCart=!showCart">
+                <div class="header__cart cart_button" @click="isVisibleCart=!isVisibleCart">
                     <img src="img/cart.png" alt="Корзина">
-                    <span class="header__cart-count">0</span>
+                    <span class="header__cart-count">{{cartQuantity}}</span>
                 </div>
-                <div :class="menuIconClasses" v-if="showHambIcon" @click="showMenuf()">
+
+                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}" v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-                <div v-if="showCart" class="header__cart-body">
-                    <div class="header__cart-top">
-                        <div class="header__cart-header">Корзина</div>
-                        <div class="header__cart-close" @click="showCart=false">x</div>
-                    </div>
-                    <div class="cart__grid cart__grid_top">
-                        <div class="cart__name">Товар</div>
-                        <div class="cart__price">Цена</div>
-                        <div class="cart__quantity">Кол-во</div>
-                        <div class="cart__sum">Сумма</div>
-                        <div class="cart__remove"></div>
-                    </div>
-                    <div id="cart">Добавьте товары в корзину из каталога</div>
-                    <div class="cart__total">
-                        <div class="cart__total-head">ИТОГО:</div>
-                        <div class="cart__total-quantity" id="cart__quantity"></div>
-                        <div class="cart__total-sum" id="cart__total"></div>
-                        <div class="cart__total-button">Купить</div>
-                        
-                        
-                    </div>
-                </div>
+
+                <cart :cart-items="cart"  @remove-cart="removeFromCart" @update-cart="addToCart"></cart>
+
             </div>
         </div>
         <nav class="header__menu_wrapper">
             <div class="container">
-                <ul class="header__menu" v-if="showMenu">
+                <ul class="header__menu" v-if="isMenuVisible">
                     <li class="header__menu-item render-main"
                         v-for="item of pages" @click="openPage(item)" :key="item.name">{{ item.name }}</li>
 <!--                    <li class="header__menu-item render-main">Каталог</li>-->
@@ -69,38 +49,35 @@
     <main>
         <div class="bradcrumb">
             <div class="bradcrumb__container container">
-                <div class="bradcrumb__desc">Интернет-магазин&nbsp;VUE</div>
+                <div class="bradcrumb__desc">
+                    Интернет-магазин&nbsp;VUE
+                </div>
                 <div class="bradcrumb__map"><span class="render-main" @click="openPage(pages[0])">{{ pages[0].name}}</span><span
-                        class="bradcrumb__map_changable">{{ bradcrumb }}</span></div>
+                        class="bradcrumb__map_changable">{{ bradcrumb }}</span>
+                </div>
             </div>
-        </div>
+
         <div class="container">
-        <section class="page">
+<!--            Сообщение об ошибке при загрузке данных-->
+            <error-comp :error-messages="errors" @close="clearErrors"></error-comp>
+
+            <section class="page">
             <h1 class="page__header"></h1>
             <article class="page__content">
-                <div v-if="pages[0].active">Страница на разработке<br><br>Перейдите в каталог</div>
 
-<!--                Каталог товаров в верстке -->
-                <div class="product-box" v-if="pages[1].active">
-                    <div class="product-item" v-for="product of goods" :key="product.id_product">
-                        <div class="product-item-in">
-                            <h3 class="product-header">{{product.product_name}}</h3>
-                            <div class="product-img">
-                                <img :src=`img/${product.id_product}.png`>
-                            </div>
-                            <p class="product-price">{{product.price}}</p>
-                        </div>
-                        <div class="product-button">
-                            <div class="product-button-buy buy-btn" @click="addToCart(product)">
-                                <img src="img/cart.png">
-                                Купить</div>
-                        </div>
-                    </div>
+                <!--                Главная страница -->
+                <div class="product-none" v-if="pages[0].active">Добро пожаловать в интернет-магазин ShopVUE
+                    <span>Интерфейс выполнен с применением движка Vue.js</span>
+                    <div @click="openPage(pages[1])">Перейти в каталог товаров...</div>
                 </div>
 
 
+                <!--                Каталог товаров в верстке -->
+                    <goods-list :goods="filteredGoods" @add-cart="addToCart" v-if="pages[1].active"></goods-list>
+
             </article>
         </section>
+        </div>
         </div>
 
     </main>
@@ -114,71 +91,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-
-    <script>
-
-        const app = new Vue({
-           el: "#page",
-           data:{
-               // подготовка страницы
-               pages:[
-                   {name:"Главная",active:true},
-                   {name:"Каталог",active:false},
-               ],
-               bradcrumb:"",
-               showCart:false,
-               showHambIcon:false,
-               showMenu:true,
-               menuIconClasses:"header__hamb",
-               searchLine:"",
-               // Работа с каталогом товаров
-               API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
-               goods:[],
-               filteredGoods:[],
-           },
-           methods:{
-
-               openPage(item){
-                   this.bradcrumb = item.name=="Главная"? "" : " / " + item.name;
-                   this.pages.forEach(page=>{page.active=(page.name==item.name)?page.active=true: page.active=false});
-                   switch (item.name){
-                       case "Каталог":
-                           this.getJSON(this.API+"/catalogData.json")
-                                .then(data => {
-                                    this.goods=[...data];
-                                    console.log(this.goods);
-                                });
-                           break;
-                   }
-
-               },
-               showMenuf(){
-                   this.showMenu=!this.showMenu;
-                   this.menuIconClasses= (this.showMenu)? "header__hamb header__hamb_click" : "header__hamb";
-               },
-
-               getJSON(url){
-                   return fetch(url)
-                            .then(result=>result.json())
-                            .catch(error=>console.log(error));
-               },
-
-               addToCart(product){
-                   console.log(product);
-               }
-
-
-
-           },
-           mounted(){
-               if(window.innerWidth<=768) {
-                   this.showHambIcon=true;
-                   this.showMenu=false;
-               }
-           }
-        });
-
-    </script>
+    <script src="components.js"></script>
+    <script src="main.js"></script>
 
 </body>
 
