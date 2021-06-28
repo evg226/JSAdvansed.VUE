@@ -1,9 +1,9 @@
 let eventBus = new Vue();
 
 Vue.component("NavMenu",{
-    props:["type","pages","loadData"],
+    props:["type","pages","loadData","isMobile"],
     template:`
-            <ul v-if="type=='top-menu'" class="header__menu" v-show="isMenuVisible">
+            <ul v-if="type=='top-menu'" class="header__menu" v-show="isMobile.menuVisible">
                 <li class="header__menu-item render-main"
                      v-for="item of pages" @click="openPage(item)" :key="item.name">{{ item.name }}</li>
             </ul>
@@ -19,16 +19,16 @@ Vue.component("NavMenu",{
                 </div>
             </div>
             
-            <div v-else-if="type=='hamburger-icon'" class="header__hamb" :class="{header__hamb_click:isMenuVisible}"
-                        v-show="isVisibleHambIcon" @click="changeMenuVisible">
+            <div v-else-if="type=='hamburger-icon'" class="header__hamb" :class="{header__hamb_click:isMobile.menuVisible}"
+                        v-show="isMobile.menuIcon" @click="changeMenuVisible">
                 <span></span><span></span><span></span>
             </div>
     `,
 
     data(){
         return {
-            isMenuVisible:true,
-            isVisibleHambIcon:false,
+            // isMenuVisible:true,
+            // isVisibleHambIcon:false,
         }
     },
     methods:{
@@ -37,17 +37,8 @@ Vue.component("NavMenu",{
             this.pages.forEach(page=>{page.active=(page.name==item.name)?page.active=true: page.active=false});
             item.name=="Каталог"&&this.loadData("/catalog");
         },
-        setMenu(){
-            this.isMenuVisible=window.innerWidth > 768;
-            this.isVisibleHambIcon=window.innerWidth <= 768;
-
-        },
         changeMenuVisible: function (){
-            console.log(this.isMenuVisible);
-            // this.isMenuVisible=!this.isMenuVisible;
-            eventBus.$emit("menuVisible",!this.isMenuVisible);
-            // // eventBus.$emit("isVisibleHambIcon",window.innerWidth <= 768);
-            eventBus.$on("menuVisible",(result)=>this.isMenuVisible=result);
+            this.isMobile.menuVisible=!this.isMobile.menuVisible;
         }
     },
     computed:{
@@ -56,8 +47,5 @@ Vue.component("NavMenu",{
             return (findActive!="Главная")? " / "+findActive: null;
         },
     },
-    mounted(){
-        this.setMenu();
-        window.addEventListener("resize",this.setMenu);
-    }
+
 });

@@ -24,7 +24,7 @@
 <!--                    <span class="header__cart-count">{{cartQuantity}}</span>-->
                     <cart :icon="true" :cart-items="cart"></cart>
                 </div>
-                <nav-menu :type="'hamburger-icon'"></nav-menu>
+                <nav-menu :type="'hamburger-icon'" :is-mobile="isMobile"></nav-menu>
                 <!--                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}"
                  v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">-->
 <!--                    <span></span>-->
@@ -38,7 +38,7 @@
         </div>
         <nav class="header__menu_wrapper">
             <div class="container">
-                <nav-menu :type="'top-menu'" :load-data="loadData" :pages="pages"></nav-menu>
+                <nav-menu :type="'top-menu'" :load-data="loadData" :pages="pages" :is-mobile="isMobile"></nav-menu>
             </div>
         </nav>
         <div class="header__line header__line_2"></div>

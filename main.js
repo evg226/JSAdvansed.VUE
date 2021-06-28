@@ -6,7 +6,7 @@ const app = new Vue({
             {name:"Каталог",active:false},
         ],
         isVisibleCart:false,
-        // isVisibleHambIcon:false,
+        isMobile: {menuIcon:false,menuVisible:true},
         goods:[],
         filteredGoods:[],
         cart:[],
@@ -35,10 +35,18 @@ const app = new Vue({
                 })
                 .catch(error=>this.errors.push("Ошибка при загрузке "+ path));
         },
+        setMenu(){
+            this.isMobile.menuVisible=window.innerWidth > 768;
+            this.isMobile.menuIcon=window.innerWidth <= 768;
+
+        },
 
     },
     mounted(){
         this.loadData("/cart");
+        this.setMenu();
+        window.addEventListener("resize",this.setMenu);
+
     }
 });
 
