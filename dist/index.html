@@ -15,22 +15,16 @@
     <header class="header">
         <div class="header__top container">
             <div class="header__top-left">
-                <div class="header__brand render-main" @click="openPage(pages[0])">ShopVUE</div>
+                <div class="header__brand render-main" @click="$refs.menu.openPage(pages[0])">ShopVUE</div>
                 <search-eq :goods="goods" :filtered-goods="filteredGoods"></search-eq>
             </div>
             <div class="header__top-right">
                 <div class="header__cart cart_button" @click="isVisibleCart=!isVisibleCart">
                     <img src="img/cart.png" alt="Корзина">
-<!--                    <span class="header__cart-count">{{cartQuantity}}</span>-->
                     <cart :icon="true" :cart-items="cart"></cart>
                 </div>
                 <nav-menu :type="'hamburger-icon'" :is-mobile="isMobile"></nav-menu>
-                <!--                <div class="header__hamb" :class="{header__hamb_click:isMenuVisible}"
-                 v-if="isVisibleHambIcon" @click="isMenuVisible=!isMenuVisible">-->
-<!--                    <span></span>-->
-<!--                    <span></span>-->
-<!--                    <span></span>-->
-<!--                </div>-->
+
 
                 <cart :icon="false" :cart-items="cart" :error-box="errors" :query-server="getJSON"></cart>
 
@@ -38,7 +32,7 @@
         </div>
         <nav class="header__menu_wrapper">
             <div class="container">
-                <nav-menu :type="'top-menu'" :load-data="loadData" :pages="pages" :is-mobile="isMobile"></nav-menu>
+                <nav-menu ref="menu" :type="'top-menu'" :load-data="loadData" :pages="pages" :is-mobile="isMobile"></nav-menu>
             </div>
         </nav>
         <div class="header__line header__line_2"></div>
@@ -53,18 +47,19 @@
             <section class="page">
             <h1 class="page__header"></h1>
             <article class="page__content">
-<!--                Главная страница -->
+            <!--                Главная страница -->
                 <div class="product-none" v-if="pages[0].active">Добро пожаловать в интернет-магазин ShopVUE
                     <span>Интерфейс выполнен с применением движка Vue.js</span>
-                    <div @click="openPage(pages[1])">Перейти в каталог товаров...</div>
+                    <div @click="$refs.menu.openPage(pages[1])">Перейти в каталог товаров...</div>
                 </div>
-
-
                 <!--                Каталог товаров в верстке -->
-                    <goods-list v-if="pages[1].active" :goods="filteredGoods" :cart-items="cart"
+                <goods-list v-if="pages[1].active" :goods="filteredGoods" :cart-items="cart"
                                 :error-box="errors" :query-server="getJSON">
-                    </goods-list>
+                </goods-list>
 
+                <call-back v-if="pages[3].active" :query="getJSON" :error-box="errors"></call-back>
+
+                <hamburger v-if="pages[2].active"></hamburger>
             </article>
             </section>
         </div>
@@ -81,12 +76,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-    <script src="errors.js"></script>
-    <script src="cart.js"></script>
-    <script src="search.js"></script>
-    <script src="calalog.js"></script>
-    <script src="pages.js"></script>
-    <script src="main.js"></script>
+    <script src="build.js"></script>
 
 </body>
 

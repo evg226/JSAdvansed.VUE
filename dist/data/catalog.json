@@ -1,0 +1,47 @@
+[
+  {
+    "id_product": 1,
+    "product_name": "Клавиатура",
+    "price": 800
+  },
+  {
+    "id_product": 2,
+    "product_name": "Геймпад",
+    "price": 2500
+  },
+  {
+    "id_product": 3,
+    "product_name": "Ноутбук",
+    "price": 28560
+  },
+  {
+    "id_product": 4,
+    "product_name": "Мышь",
+    "price": 450
+  },
+  {
+    "id_product": 5,
+    "product_name": "Смартфон",
+    "price": 42800
+  },
+  {
+    "id_product": 6,
+    "product_name": "Планшет",
+    "price": 36700
+  },
+  {
+    "id_product": 7,
+    "product_name": "Телевизор",
+    "price": 24800
+  },
+  {
+    "id_product": 8,
+    "product_name": "Роутер",
+    "price": 3950
+  },
+  {
+    "id_product": 9,
+    "product_name": "Компьютер",
+    "price": 36900
+  }
+]

@@ -93,6 +93,26 @@ app.post("/removeFromToCart",(req,res)=>{
         }
     })
 });
+app.post("/sendCallBack",(req,res)=>{
+    fs.readFile("./data/messages.json","utf-8",(err,result)=>{
+        if (err){
+            res.send('{"result": 0}');
+        } else {
+            const messageBox=JSON.parse(result);
+            const message=req.body;
+            messageBox.push(message);
+            fs.writeFile("./data/messages.json",JSON.stringify(messageBox),err=>{
+                console.log(err);
+                if (err){
+                    res.send('{"result": 0}');
+                } else {
+                    res.send('{"result": 1}');
+                    stats.writeStat("Сообщение от пользователя: ",message.username);
+                }
+            });
+        }
+    });
+})
 
 
 
