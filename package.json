@@ -1,0 +1,16 @@
+{
+  "name": "inetshop",
+  "version": "1.0.0",
+  "description": "Internet-Shop",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "evg226",
+  "license": "ISC",
+  "devDependencies": {
+    "watch": "^1.0.2",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.7.2"
+  }
+}
